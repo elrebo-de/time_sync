@@ -51,6 +51,12 @@ uint32_t TimeSync::get_sync_interval_ms()
     return this->sync_interval_ms;
 }
 
+// Function to test whether time is synchronized
+bool TimeSync::is_synchronized()
+{
+    return this->time_synchronized;
+}
+
 // Function to initialize SNTP  with multiple servers
 void TimeSync::initialize_sntp()
 {
@@ -70,7 +76,17 @@ void TimeSync::obtain_time(void)
 {
     // Wait for time to be set
     time_t now = 0;
-    struct tm timeinfo = {0};
+    struct tm timeinfo = {
+                           0, // tm_sec	int	seconds after the minute	0-60*
+                           0, // tm_min	int	minutes after the hour	0-59
+                           0, // tm_hour	int	hours since midnight	0-23
+                           0, // tm_mday	int	day of the month	1-31
+                           0, // tm_mon	int	months since January	0-11
+                           0, // tm_year	int	years since 1900
+                           0, // tm_wday	int	days since Sunday	0-6
+                           0, // tm_yday	int	days since January 1	0-365
+                           0  // tm_isdst	int	Daylight Saving Time flag
+                         };
     int retry = 0;
     const int retry_count = 10;
 
@@ -89,6 +105,7 @@ void TimeSync::obtain_time(void)
     }
 
     ESP_LOGI(tag.c_str(), "Time synchronized.");
+    this->time_synchronized = true;
 }
 
 // Function to set timezone

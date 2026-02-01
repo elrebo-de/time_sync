@@ -46,8 +46,13 @@ extern "C" void app_main(void)
 
     xTaskCreate(timeTask, "time_task", 4096, NULL, 5, NULL);
 
+    while(!timeSync->is_synchronized()) {
+        ESP_LOGI(tag, "time is not yet synchronized");
+        vTaskDelay(pdMS_TO_TICKS(1000)); // delay 1 second
+    }
+
     while(1) {
-        ESP_LOGI(tag, "sleep 10 seconds");
+        ESP_LOGI(tag, "wait 10 seconds");
         vTaskDelay(pdMS_TO_TICKS(10000)); // delay 10 seconds
     }
 }

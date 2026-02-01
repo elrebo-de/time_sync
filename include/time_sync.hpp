@@ -34,6 +34,7 @@ class TimeSync
         void set_sync_interval_ms(uint32_t sync_interval_ms);
 
         uint32_t get_sync_interval_ms();
+        bool is_synchronized();
 
         void initialize_sntp();
         void obtain_time(void);
@@ -49,6 +50,8 @@ class TimeSync
         std::string sntp_server_3 = "time.google.com";
 
         uint32_t sync_interval_ms = 300000;
+
+        bool time_synchronized = false;
 
     public:
         TimeSync(TimeSync const&) = delete;
