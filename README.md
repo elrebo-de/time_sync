@@ -47,7 +47,12 @@ extern "C" void app_main(void)
 
     xTaskCreate(timeTask, "time_task", 4096, NULL, 5, NULL);
 
-    ... now the time will be synchronized every sync_interval_ms milliseconds
+    while(!timeSync->is_synchronized()) {
+        ESP_LOGI(tag, "time is not yet synchronized");
+        vTaskDelay(pdMS_TO_TICKS(1000)); // delay 1 second
+    }
+
+    ... now the time is synchronized and will be synchronized again every sync_interval_ms milliseconds
     
     ... do your work here
 }
@@ -83,6 +88,7 @@ class TimeSync
         void set_sync_interval_ms(uint32_t sync_interval_ms);
 
         uint32_t get_sync_interval_ms();
+        bool is_synchronized();
 
         void initialize_sntp();
         void obtain_time(void);
@@ -98,6 +104,8 @@ class TimeSync
         std::string sntp_server_3 = "time.google.com";
 
         uint32_t sync_interval_ms = 300000;
+
+        bool time_synchronized = false;
 
     public:
         TimeSync(TimeSync const&) = delete;
