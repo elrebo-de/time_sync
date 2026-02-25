@@ -16,12 +16,12 @@ static void timeTask(void *pc){
     TimeSync* timeSync = &TimeSync::getInstance();
 
     // Synchronize time
-    timeSync->obtain_time();
+    timeSync->obtainTime();
 
     while (1)
     {
-        timeSync->print_calendar();
-        vTaskDelay(pdMS_TO_TICKS(timeSync->get_sync_interval_ms())); // Print calendar every 5 minutes
+        timeSync->printCalendar();
+        vTaskDelay(pdMS_TO_TICKS(timeSync->getSyncIntervalMs())); // Print calendar every sync interval
     }
 }
 
@@ -40,13 +40,13 @@ extern "C" void app_main(void)
     /* Initialize TimeSync class */
     ESP_LOGI(tag, "TimeSync");
     TimeSync* timeSync = &timeSync->getInstance();
-    timeSync->initialize_sntp();
-    timeSync->set_timezone(std::string("CET"));
-    timeSync->set_sync_interval_ms(30000);
+    timeSync->initializeSntp();
+    timeSync->setTimezone(std::string("CET"));
+    timeSync->setSyncIntervalMs(30000); // syncIntervalMs set to 30 sec, default for normal operation is 5 mins
 
-    xTaskCreate(timeTask, "time_task", 4096, NULL, 5, NULL);
+    xTaskCreate(timeTask, "timeTask", 4096, NULL, 5, NULL);
 
-    while(!timeSync->is_synchronized()) {
+    while(!timeSync->isSynchronized()) {
         ESP_LOGI(tag, "time is not yet synchronized");
         vTaskDelay(pdMS_TO_TICKS(1000)); // delay 1 second
     }

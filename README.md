@@ -25,11 +25,11 @@ static void timeTask(void *pc){
     TimeSync* timeSync = &TimeSync::getInstance();
 
     // Synchronize time
-    timeSync->obtain_time();
+    timeSync->obtainTime();
 
     while (1)
     {
-        timeSync->print_calendar();
+        timeSync->printCalendar();
         vTaskDelay(pdMS_TO_TICKS(timeSync->get_sync_interval_ms())); // Print calendar every 5 minutes
     }
 }
@@ -41,13 +41,13 @@ extern "C" void app_main(void)
     /* Initialize TimeSync class */
     ESP_LOGI(tag, "TimeSync");
     TimeSync* timeSync = &timeSync->getInstance();
-    timeSync->initialize_sntp();
-    timeSync->set_timezone(std::string("CET"));
-    timeSync->set_sync_interval_ms(30000);
+    timeSync->initializeSntp();
+    timeSync->setTimezone(std::string("CET"));
+    timeSync->setSyncIntervalMs(30000);
 
     xTaskCreate(timeTask, "time_task", 4096, NULL, 5, NULL);
 
-    while(!timeSync->is_synchronized()) {
+    while(!timeSync->isSynchronized()) {
         ESP_LOGI(tag, "time is not yet synchronized");
         vTaskDelay(pdMS_TO_TICKS(1000)); // delay 1 second
     }
@@ -80,32 +80,31 @@ class TimeSync
 {
     public:
         static TimeSync& getInstance();
-        void set_sntp_servers( std::string sntp_server_1,  // 1. sntp server
-                                      std::string sntp_server_2,  // 2. sntp server
-                                      std::string sntp_server_3   // 3. sntp server
-                                    );
-        void set_timezone(std::string timezone);
-        void set_sync_interval_ms(uint32_t sync_interval_ms);
+        void setSntpServers( std::string sntpServer1,  // 1. sntp server
+                             std::string sntpServer2,  // 2. sntp server
+                             std::string sntpServer3   // 3. sntp server
+                           );
+        void setTimezone(std::string timezone);
+        void setSyncIntervalMs(uint32_t syncIntervalMs);
 
-        uint32_t get_sync_interval_ms();
-        bool is_synchronized();
+        uint32_t getSyncIntervalMs();
+        bool isSynchronized();
 
-        void initialize_sntp();
-        void obtain_time(void);
-        void print_calendar();
-        void timeTask(void *pc);
+        void initializeSntp();
+        void obtainTime(void);
+        void printCalendar();
 
     private:
         TimeSync() {}                 // Constructor
 
         std::string tag = "TimeSync";
-        std::string sntp_server_1 = "pool.ntp.org";
-        std::string sntp_server_2 = "time.nist.gov";
-        std::string sntp_server_3 = "time.google.com";
+        std::string sntpServer1 = "pool.ntp.org";
+        std::string sntpServer2 = "time.nist.gov";
+        std::string sntpServer3 = "time.google.com";
 
-        uint32_t sync_interval_ms = 300000;
+        uint32_t syncIntervalMs = 300000;
 
-        bool time_synchronized = false;
+        bool timeSynchronized = false;
 
     public:
         TimeSync(TimeSync const&) = delete;

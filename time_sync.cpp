@@ -27,52 +27,52 @@ TimeSync& TimeSync::getInstance()
 }
 
 // Function to set sntp servers
-void TimeSync::set_sntp_servers( std::string sntp_server_1,
-                                 std::string sntp_server_2,
-                                 std::string sntp_server_3
+void TimeSync::setSntpServers( std::string sntpServer1,
+                                 std::string sntpServer2,
+                                 std::string sntpServer3
                                )
 {
     ESP_LOGI(tag.c_str(), "Set SNTP srvers");
-    if(sntp_server_1 != "") this->sntp_server_1 = sntp_server_1;
-    if(sntp_server_2 != "") this->sntp_server_2 = sntp_server_2;
-    if(sntp_server_3 != "") this->sntp_server_3 = sntp_server_3;
+    if(sntpServer1 != "") this->sntpServer1 = sntpServer1;
+    if(sntpServer2 != "") this->sntpServer2 = sntpServer2;
+    if(sntpServer3 != "") this->sntpServer3 = sntpServer3;
 }
 
-// Function to set sync_interval_ms
-void TimeSync::set_sync_interval_ms(uint32_t sync_interval_ms)
+// Function to set syncIntervalMs
+void TimeSync::setSyncIntervalMs(uint32_t syncIntervalMs)
  {
-     ESP_LOGI(tag.c_str(), "Setting sync_interval_ms to: %lu", sync_interval_ms);
-     this->sync_interval_ms = sync_interval_ms;
+     ESP_LOGI(tag.c_str(), "Setting syncIntervalMs to: %lu", syncIntervalMs);
+     this->syncIntervalMs = syncIntervalMs;
  }
 
-// Function to get sync_interval_ms
-uint32_t TimeSync::get_sync_interval_ms()
+// Function to get syncIntervalMs
+uint32_t TimeSync::getSyncIntervalMs()
 {
-    return this->sync_interval_ms;
+    return this->syncIntervalMs;
 }
 
 // Function to test whether time is synchronized
-bool TimeSync::is_synchronized()
+bool TimeSync::isSynchronized()
 {
-    return this->time_synchronized;
+    return this->timeSynchronized;
 }
 
 // Function to initialize SNTP  with multiple servers
-void TimeSync::initialize_sntp()
+void TimeSync::initializeSntp()
 {
     ESP_LOGI(tag.c_str(), "Initializing SNTP");
     esp_sntp_setoperatingmode(SNTP_OPMODE_POLL);
 
     // Set multiple NTP servers
-    esp_sntp_setservername(0, this->sntp_server_1.c_str()); // Primary server
-    esp_sntp_setservername(1, this->sntp_server_2.c_str()); // Secondary server
-    esp_sntp_setservername(2, this->sntp_server_3.c_str()); // Tertiary server
+    esp_sntp_setservername(0, this->sntpServer1.c_str()); // Primary server
+    esp_sntp_setservername(1, this->sntpServer2.c_str()); // Secondary server
+    esp_sntp_setservername(2, this->sntpServer3.c_str()); // Tertiary server
 
     esp_sntp_init();
 }
 
 // Function to obtain and print time
-void TimeSync::obtain_time(void)
+void TimeSync::obtainTime(void)
 {
     // Wait for time to be set
     time_t now = 0;
@@ -105,11 +105,11 @@ void TimeSync::obtain_time(void)
     }
 
     ESP_LOGI(tag.c_str(), "Time synchronized.");
-    this->time_synchronized = true;
+    this->timeSynchronized = true;
 }
 
 // Function to set timezone
-void TimeSync::set_timezone(std::string timezone)
+void TimeSync::setTimezone(std::string timezone)
 {
     ESP_LOGI(tag.c_str(), "Setting timezone to: %s", timezone.c_str());
     setenv("TZ", timezone.c_str(), 1); // Set the TZ environment variable
@@ -117,7 +117,7 @@ void TimeSync::set_timezone(std::string timezone)
 }
 
 // Print current calendar information
-void TimeSync::print_calendar()
+void TimeSync::printCalendar()
 {
     time_t now;
     struct tm timeinfo;
