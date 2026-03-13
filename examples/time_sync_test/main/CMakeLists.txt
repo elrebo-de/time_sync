@@ -1,10 +1,3 @@
 idf_component_register( SRCS "main.cpp"
                         INCLUDE_DIRS "."
-                        REQUIRES "driver"
-                                 "esp_timer"
-                                 "esp_event"
-                                 "elrebo-de__time_sync"
-                                 "elrebo-de__wifi_manager"
-                                 "78__esp-wifi-connect"
-                                 "nvs_flash"
                       )

@@ -1,4 +1,4 @@
-version: "1.2.0"
+version: "1.2.1"
 license: "MIT"
 description: "Time synchronization component for ESP-IDF version 5.5.0+ using a C++ class"
 url: "https://elrebo.de/index.php/2026/02/25/time_sync/"
